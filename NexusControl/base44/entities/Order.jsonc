@@ -1,0 +1,131 @@
+{
+  "name": "Order",
+  "type": "object",
+  "properties": {
+    "book_id": {
+      "type": "string",
+      "description": "ID of the ordered book"
+    },
+    "book_title": {
+      "type": "string",
+      "description": "Title of the book"
+    },
+    "buyer_email": {
+      "type": "string",
+      "description": "Email of the buyer"
+    },
+    "buyer_name": {
+      "type": "string",
+      "description": "Name of the buyer"
+    },
+    "order_type": {
+      "type": "string",
+      "enum": [
+        "digital",
+        "physical"
+      ],
+      "default": "digital",
+      "description": "Type of order"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price paid"
+    },
+    "shipping_cost": {
+      "type": "number",
+      "description": "Shipping cost for physical orders"
+    },
+    "total_amount": {
+      "type": "number",
+      "description": "Total amount (price + shipping)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "activated",
+        "completed",
+        "cancelled",
+        "shipped",
+        "delivered"
+      ],
+      "default": "pending",
+      "description": "Order status"
+    },
+    "activation_code": {
+      "type": "string",
+      "description": "Unique activation code for the order"
+    },
+    "activated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the order was activated"
+    },
+    "shipping_address": {
+      "type": "string",
+      "description": "Full shipping address"
+    },
+    "shipping_city": {
+      "type": "string",
+      "description": "City"
+    },
+    "shipping_state": {
+      "type": "string",
+      "description": "State/Province"
+    },
+    "shipping_zip": {
+      "type": "string",
+      "description": "ZIP/Postal code"
+    },
+    "shipping_country": {
+      "type": "string",
+      "description": "Country"
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "tracking_number": {
+      "type": "string",
+      "description": "Shipping tracking number"
+    },
+    "shipped_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the order was shipped"
+    }
+  },
+  "required": [
+    "book_id",
+    "book_title",
+    "buyer_email",
+    "price"
+  ],
+  "rls": {
+    "create": {
+      "buyer_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "buyer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

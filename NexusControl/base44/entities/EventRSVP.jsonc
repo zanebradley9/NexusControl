@@ -1,0 +1,64 @@
+{
+  "name": "EventRSVP",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Related event ID"
+    },
+    "event_title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "User email"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "User name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "attending",
+        "maybe",
+        "not_attending"
+      ],
+      "default": "attending"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_title",
+    "user_email",
+    "user_name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$ne": "guest"
+        }
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 16% 8%;
+    --foreground: 210 20% 92%;
+
+    --card: 220 16% 11%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 220 16% 11%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 16%;
+    --secondary-foreground: 210 20% 80%;
+
+    --muted: 220 14% 14%;
+    --muted-foreground: 215 15% 50%;
+
+    --accent: 220 14% 18%;
+    --accent-foreground: 210 20% 85%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 14% 18%;
+    --input: 220 14% 16%;
+    --ring: 160 84% 39%;
+
+    --radius: 0.6rem;
+
+    /* Custom tokens */
+    --status-online: 160 84% 39%;
+    --status-offline: 215 15% 40%;
+    --status-error: 0 72% 51%;
+    --status-idle: 45 93% 47%;
+
+    --surface-1: 220 16% 11%;
+    --surface-2: 220 14% 14%;
+    --surface-3: 220 14% 18%;
+
+    --glow-primary: 160 84% 39%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+@layer utilities {
+  .font-mono-code {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.3);
+  }
+
+  .glow-error {
+    box-shadow: 0 0 20px hsl(var(--destructive) / 0.3);
+  }
+
+  .status-pulse-online {
+    animation: pulse-online 2s infinite;
+  }
+
+  .status-pulse-error {
+    animation: pulse-error 1.5s infinite;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.3) 1px, transparent 1px);
+
+    background-size: 32px 32px;
+  }
+}
+
+@keyframes pulse-online {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--status-online) / 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px hsl(var(--status-online) / 0);
+  }
+}
+
+@keyframes pulse-error {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--status-error) / 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px hsl(var(--status-error) / 0);
+  }
+}

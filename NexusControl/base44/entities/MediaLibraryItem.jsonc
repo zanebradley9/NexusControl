@@ -1,0 +1,58 @@
+{
+  "name": "MediaLibraryItem",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video",
+        "storyboard",
+        "voice",
+        "scene"
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "project_title": {
+      "type": "string"
+    },
+    "scene_index": {
+      "type": "number"
+    },
+    "prompt_used": {
+      "type": "string"
+    },
+    "duration_seconds": {
+      "type": "number"
+    },
+    "quality": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "approved_for_publish": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "type",
+    "url"
+  ]
+}

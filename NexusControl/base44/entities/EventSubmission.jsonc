@@ -1,0 +1,96 @@
+{
+  "name": "EventSubmission",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Related event ID"
+    },
+    "event_title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "submitter_name": {
+      "type": "string",
+      "description": "Name of submitter"
+    },
+    "submitter_email": {
+      "type": "string",
+      "description": "Email of submitter"
+    },
+    "card_message": {
+      "type": "string",
+      "description": "Card message/content"
+    },
+    "card_design": {
+      "type": "string",
+      "enum": [
+        "classic",
+        "modern",
+        "elegant",
+        "playful"
+      ],
+      "default": "classic"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "event_id",
+    "submitter_name",
+    "submitter_email",
+    "card_message"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$ne": "guest"
+        }
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

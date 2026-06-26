@@ -1,0 +1,198 @@
+{
+  "name": "Book",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "The title of the book"
+    },
+    "content": {
+      "type": "string",
+      "description": "The main content/text of the book"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description or summary"
+    },
+    "ai_generated_description": {
+      "type": "string",
+      "description": "AI-generated compelling description"
+    },
+    "description_approved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether admin approved the AI description"
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "fiction",
+        "non_fiction",
+        "poetry",
+        "mystery",
+        "romance",
+        "adventure",
+        "biography",
+        "self_help",
+        "educational",
+        "other"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_progress",
+        "completed",
+        "published"
+      ],
+      "default": "draft"
+    },
+    "word_count": {
+      "type": "number",
+      "default": 0
+    },
+    "page_count": {
+      "type": "number",
+      "description": "Number of pages in the book",
+      "default": 0
+    },
+    "cover_image": {
+      "type": "string",
+      "description": "URL to cover image"
+    },
+    "cover_template": {
+      "type": "string",
+      "description": "URL to uploaded cover template"
+    },
+    "digital_price": {
+      "type": "number",
+      "description": "Digital download price",
+      "default": 0
+    },
+    "physical_price": {
+      "type": "number",
+      "description": "Physical book price"
+    },
+    "for_sale": {
+      "type": "boolean",
+      "default": false
+    },
+    "physical_available": {
+      "type": "boolean",
+      "default": false,
+      "description": "Available as physical book"
+    },
+    "shipping_cost": {
+      "type": "number",
+      "description": "Shipping cost for physical book",
+      "default": 5.99
+    },
+    "collaborators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of user emails who are collaborators"
+    },
+    "comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "selection_start": {
+            "type": "number"
+          },
+          "selection_end": {
+            "type": "number"
+          },
+          "resolved": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$ne": "guest"
+        }
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "collaborators": {
+            "$in": [
+              "{{user.email}}"
+            ]
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "status": "published"
+        },
+        {
+          "for_sale": true
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "collaborators": {
+            "$in": [
+              "{{user.email}}"
+            ]
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

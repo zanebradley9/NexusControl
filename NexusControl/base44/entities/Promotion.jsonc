@@ -1,0 +1,55 @@
+{
+  "name": "Promotion",
+  "type": "object",
+  "properties": {
+    "book_id": {
+      "type": "string",
+      "description": "ID of the book being promoted"
+    },
+    "book_title": {
+      "type": "string"
+    },
+    "discount_percentage": {
+      "type": "number",
+      "description": "Discount percentage (e.g., 20 for 20%)"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "active",
+        "expired"
+      ],
+      "default": "scheduled"
+    }
+  },
+  "required": [
+    "book_id",
+    "book_title",
+    "discount_percentage",
+    "start_date",
+    "end_date"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

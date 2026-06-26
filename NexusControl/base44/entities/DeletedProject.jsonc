@@ -1,0 +1,70 @@
+{
+  "name": "DeletedProject",
+  "type": "object",
+  "properties": {
+    "original_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "source_content": {
+      "type": "string"
+    },
+    "source_file_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "quality": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "tone": {
+      "type": "string"
+    },
+    "time_of_day": {
+      "type": "string"
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "storyboard_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "generated_media": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "total_scenes": {
+      "type": "number"
+    },
+    "completed_scenes": {
+      "type": "number"
+    },
+    "deleted_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "original_id"
+  ]
+}

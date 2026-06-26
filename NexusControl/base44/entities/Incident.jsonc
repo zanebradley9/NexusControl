@@ -1,0 +1,95 @@
+{
+  "name": "Incident",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Brief title of the incident"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the suspicious activity"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "unauthorized_access",
+        "data_breach",
+        "phishing",
+        "malware",
+        "insider_threat",
+        "social_engineering",
+        "physical_security",
+        "other"
+      ],
+      "description": "Category of the incident"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium",
+      "description": "Severity level"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "investigating",
+        "resolved",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Current status"
+    },
+    "location": {
+      "type": "string",
+      "description": "Where the incident occurred"
+    },
+    "ai_analysis": {
+      "type": "string",
+      "description": "AI-generated analysis of the incident"
+    },
+    "ai_threat_level": {
+      "type": "string",
+      "enum": [
+        "minimal",
+        "low",
+        "moderate",
+        "high",
+        "critical"
+      ],
+      "description": "AI-assessed threat level"
+    },
+    "ai_recommendations": {
+      "type": "string",
+      "description": "AI-generated recommended actions"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "File attachments (screenshots, logs)"
+    },
+    "reporter_notes": {
+      "type": "string",
+      "description": "Additional notes from the reporter"
+    },
+    "admin_notes": {
+      "type": "string",
+      "description": "Notes added by admin during investigation"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "type",
+    "severity"
+  ]
+}

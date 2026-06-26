@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Environment files
+.env
+.env.local
+
+# Build folders
+dist/
+build/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel/
+
+# Coverage
+coverage/

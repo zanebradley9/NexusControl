@@ -1,0 +1,66 @@
+{
+  "name": "Achievement",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Achievement title"
+    },
+    "description": {
+      "type": "string",
+      "description": "What was achieved"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Emoji or icon for the achievement"
+    },
+    "earned_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the achievement was earned"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "writing",
+        "community",
+        "reading",
+        "streak",
+        "milestone"
+      ],
+      "description": "Type of achievement"
+    }
+  },
+  "required": [
+    "title",
+    "icon",
+    "earned_date"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

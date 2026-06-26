@@ -1,0 +1,64 @@
+{
+  "name": "BookReview",
+  "type": "object",
+  "properties": {
+    "book_id": {
+      "type": "string",
+      "description": "ID of the reviewed book"
+    },
+    "book_title": {
+      "type": "string",
+      "description": "Title of the book"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Rating from 1-5 stars"
+    },
+    "review_text": {
+      "type": "string",
+      "description": "Written review"
+    },
+    "reviewer_name": {
+      "type": "string",
+      "description": "Name of reviewer"
+    },
+    "reviewer_email": {
+      "type": "string",
+      "description": "Email of reviewer"
+    }
+  },
+  "required": [
+    "book_id",
+    "book_title",
+    "rating",
+    "reviewer_name",
+    "reviewer_email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$ne": "guest"
+        }
+      }
+    },
+    "read": true,
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

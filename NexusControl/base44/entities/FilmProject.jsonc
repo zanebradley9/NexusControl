@@ -1,0 +1,131 @@
+{
+  "name": "FilmProject",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Project title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Project description"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "prompt",
+        "book",
+        "script",
+        "pdf",
+        "text_file",
+        "story"
+      ],
+      "description": "Source of the project"
+    },
+    "source_content": {
+      "type": "string",
+      "description": "Full source text content"
+    },
+    "source_file_url": {
+      "type": "string",
+      "description": "URL of uploaded source file"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "parsing",
+        "storyboarding",
+        "generating",
+        "rendering",
+        "complete",
+        "published"
+      ],
+      "default": "draft"
+    },
+    "quality": {
+      "type": "string",
+      "enum": [
+        "1080p",
+        "4K",
+        "8K"
+      ],
+      "default": "4K"
+    },
+    "genre": {
+      "type": "string",
+      "description": "Film genre"
+    },
+    "tone": {
+      "type": "string",
+      "enum": [
+        "cinematic",
+        "dramatic",
+        "comedic",
+        "horror",
+        "documentary",
+        "fantasy",
+        "sci-fi"
+      ],
+      "default": "cinematic"
+    },
+    "time_of_day": {
+      "type": "string",
+      "enum": [
+        "dawn",
+        "day",
+        "dusk",
+        "night",
+        "dynamic"
+      ],
+      "default": "dynamic"
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Generated scene data"
+    },
+    "chapters": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Parsed chapters from source"
+    },
+    "storyboard_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URLs of storyboard images"
+    },
+    "generated_media": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Generated images/videos"
+    },
+    "youtube_published": {
+      "type": "boolean",
+      "default": false
+    },
+    "youtube_url": {
+      "type": "string"
+    },
+    "total_scenes": {
+      "type": "number",
+      "default": 0
+    },
+    "completed_scenes": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "status"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the conversation"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "web",
+        "game",
+        "data",
+        "mobile",
+        "devops",
+        "general"
+      ],
+      "default": "general",
+      "description": "Category of the conversation"
+    },
+    "language": {
+      "type": "string",
+      "description": "Primary language or framework discussed"
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

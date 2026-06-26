@@ -1,0 +1,76 @@
+{
+  "name": "Earning",
+  "type": "object",
+  "properties": {
+    "book_id": {
+      "type": "string",
+      "description": "ID of the book that generated earnings"
+    },
+    "book_title": {
+      "type": "string",
+      "description": "Title of the book"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount earned"
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Related order ID"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "withdrawn"
+      ],
+      "default": "pending",
+      "description": "Payment status"
+    },
+    "withdrawn_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the earnings were withdrawn"
+    }
+  },
+  "required": [
+    "book_id",
+    "book_title",
+    "amount"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
