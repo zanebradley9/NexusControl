@@ -39,7 +39,6 @@
     "content",
     "author_name"
   ],
-  "rls": {
     "create": {
       "user_condition": {
         "role": {
@@ -70,7 +69,6 @@
             "role": "admin"
           }
         }
-      ]
+    ]
     }
   }
-}

@@ -9,9 +9,8 @@ const statusConfig = {
   idle:    { dot: 'bg-yellow-400',                       label: 'IDLE',    badge: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30' },
 };
 
-// @ts-ignore
 export default function ScriptCard({ script, onClick }) {
-  // @ts-ignore
+
   const cfg = statusConfig[script.status] || statusConfig.offline;
 
   return (

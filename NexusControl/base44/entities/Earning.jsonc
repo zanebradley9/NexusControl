@@ -39,7 +39,6 @@
     "book_title",
     "amount"
   ],
-  "rls": {
     "create": {
       "created_by": "{{user.email}}"
     },
@@ -73,4 +72,3 @@
       }
     }
   }
-}

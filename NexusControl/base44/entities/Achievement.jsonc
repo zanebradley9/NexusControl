@@ -36,7 +36,6 @@
     "icon",
     "earned_date"
   ],
-  "rls": {
     "create": {
       "created_by": "{{user.email}}"
     },
@@ -63,4 +62,3 @@
       }
     }
   }
-}

@@ -34,7 +34,6 @@
     "user_email",
     "user_name"
   ],
-  "rls": {
     "create": {
       "user_condition": {
         "role": {
@@ -61,4 +60,3 @@
       "created_by": "{{user.email}}"
     }
   }
-}

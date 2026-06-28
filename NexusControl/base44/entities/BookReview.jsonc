@@ -36,7 +36,6 @@
     "reviewer_name",
     "reviewer_email"
   ],
-  "rls": {
     "create": {
       "user_condition": {
         "role": {
@@ -61,4 +60,3 @@
       ]
     }
   }
-}

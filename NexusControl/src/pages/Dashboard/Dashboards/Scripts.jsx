@@ -6,6 +6,8 @@ import ScriptCard from '@/components/scripts/ScriptCard';
 import { Plus, Search, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AddScriptModal from '@/components/scripts/AddScriptModal';
+import CommandHistory from '@/components/scripts/CommandHistory';
+import CommandPanel from '@/components/scripts/CommandPanel';
 import { cn } from '@/lib/utils';
 
 const STATUS_FILTERS = ['all', 'online', 'offline', 'error', 'idle'];

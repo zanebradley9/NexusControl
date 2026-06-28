@@ -30,14 +30,10 @@ import Checkout from "@/lib/Checkout";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 import DashboardCode from "@/pages/Dashboard/Dashboards/DashboardCode";
 import Jarvis from "@/pages/Dashboard/Dashboards/Jarvis";
-
 import StoreSkills from "@/pages/Dashboard/Gamestore/StoreSkills";
 import StoreGun from "@/pages/Dashboard/Gamestore/StoreGun";
 import StoreCar from "@/pages/Dashboard/Gamestore/StoreCar";
 import CreateSkills3D from "@/pages/Dashboard/Gamestore/CreateSkills3D";
-
-import MainScreen from "@/pages/main/MainScreen";
-
 import Admin from "@/pages/Dashboard/BookNookStudio/Admin";
 import AdminReporting from "@/pages/Dashboard/BookNookStudio/AdminReporting";
 import Analytics from "@/pages/Dashboard/BookNookStudio/Analytics";
@@ -57,6 +53,19 @@ import ReadBook from "@/pages/Dashboard/BookNookStudio/ReadBook";
 import Showcase from "@/pages/Dashboard/BookNookStudio/Showcase";
 import Tools from "@/pages/Dashboard/BookNookStudio/Tools";
 import Write from "@/pages/Dashboard/BookNookStudio/Write";
+import NexusCodeHome from "@/pages/Dashboard/NexusCode/NexusCodeHome";
+import IncidentDetail from "@/pages/Dashboard/SentinelAI/IncidentDetail";
+import Incidents from "@/pages/Dashboard/SentinelAI/Incidents";
+import NewIncident from "@/pages/Dashboard/SentinelAI/NewIncident";
+import Register from "@/pages/Dashboard/SentinelAI/Register"
+import SentinelAIChat from "@/pages/Dashboard/SentinelAI/SentinelAIChat";
+import SentinelAiDashboard from "@/pages/Dashboard/SentinelAI/SentinelAiDashboard";
+import SentinelAIForgotPassword from "@/pages/Dashboard/SentinelAI/SentinelAIForgotPassword";
+import SentinelAILogin from "@/pages/Dashboard/SentinelAI/SentinelAILogin";
+import SentinelAIResetPassword from "@/pages/Dashboard/SentinelAI/SentinelAIResetPassword";
+import FilmStudio from "@/pages/Dashboard/Seth/FilmStudio";
+import SETH from "@/pages/Dashboard/Seth/SETH";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -126,11 +135,23 @@ const AuthenticatedApp = () => {
         <Route path="/booknookstudio/showcase" element={<ProtectedRoute><Showcase /></ProtectedRoute>} />
         <Route path="/booknookstudio/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
         <Route path="/booknookstudio/write" element={<ProtectedRoute><Write /></ProtectedRoute>} />
+        <Route path="/NexusCode/NexusCodeHome" element={<ProtectedRoute><NexusCodeHome /></ProtectedRoute>} />
+        <Route path="/SentinelAI/IncidentDetail" element={<ProtectedRoute><IncidentDetail /></ProtectedRoute>} />
+        <Route path="/SentinelAI/Incidents" element={<ProtectedRoute><Incidents /></ProtectedRoute>} />
+        <Route path="/SentinelAI/NewIncident" element={<ProtectedRoute><NewIncident /></ProtectedRoute>} />
+        <Route path="/SentinelAI/Register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
+        <Route path="/SentinelAI/SentinelAIChat" element={<ProtectedRoute><SentinelAIChat /></ProtectedRoute>} />
+        <Route path="/SentinelAI/SentinelAiDashboard" element={<ProtectedRoute><SentinelAiDashboard /></ProtectedRoute>} />
+        <Route path="/SentinelAI/SentinelAIForgotPassword" element={<ProtectedRoute><SentinelAIForgotPassword /></ProtectedRoute>} />
+        <Route path="/SentinelAI/SentinelAILogin" element={<ProtectedRoute><SentinelAILogin /></ProtectedRoute>} />
+        <Route path="/SentinelAI/SentinelAIResetPassword"element={<ProtectedRoute><SentinelAIResetPassword /></ProtectedRoute>} />
+        <Route path="/Seth/FilmStudio"element={<ProtectedRoute><FilmStudio /></ProtectedRoute>} />
+        <Route path="/Seth/SETH" element={<ProtectedRoute><SETH /></ProtectedRoute>} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/auth/logout" element={<Logout />} />
-        <Route path="/main" element={<MainScreen />} />
+        <Route path="/components/sidebar/Sidebar" element={<Sidebar />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

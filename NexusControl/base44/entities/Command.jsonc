@@ -36,7 +36,6 @@
     "script_id",
     "command"
   ],
-  "rls": {
     "create": {
       "created_by": "{{user.email}}"
     },
@@ -77,4 +76,3 @@
       ]
     }
   }
-}

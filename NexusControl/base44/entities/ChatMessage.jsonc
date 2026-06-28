@@ -28,7 +28,6 @@
     "content",
     "channel"
   ],
-  "rls": {
     "create": {
       "created_by": "{{user.email}}"
     },
@@ -95,4 +94,3 @@
       ]
     }
   }
-}

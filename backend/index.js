@@ -13,8 +13,8 @@ import crypto from "crypto";
 import "./Discord/discords/bot.js";
 import "./Discord/discords/partnerships.js";
 import "./Discord/discords/logoutLogger.js";
-
-
+import { logAudit } from "./utils/audit.js";
+import { discordLog } from "./utils/discord.js";
 import { startJarvis } from "./server.js";
 
 /* =========================
@@ -22,11 +22,22 @@ import { startJarvis } from "./server.js";
 ========================= */
 import chatRoutes from "./routes/chat.js";
 import loginRoute from "./api/auth/login.js";
-import signupRoute from "./api/auth/signup.js";
+import signupRoute from "./api/auth/signup.js";    
+import changePassword from "./api/auth/changepassword.js";
+import deleteAccount from "./api/auth/deleteaccount.js";
+import forgotPassword from "./api/auth/forgotpassword.js";
+import resetPassword from "./api/auth/resetpassword.js";
+import resendVerification from "./api/auth/resendverification.js";
+import verifyEmail from "./api/auth/verifyemail.js";
+import me from "./api/auth/me.js";
+import refresh from "./api/auth/refresh.js";
 import stripeRoute from "./api/router/stripe.js";
 import billingRoute from "./api/router/billing.js";
 import checkoutRoute from "./api/router/checkout.js";
-
+import { ENV } from "./config/env.js";
+import { connectDatabase } from "./database/index.js";
+import { startScheduler } from "./scheduler.js";
+import { setupWebsocket } from "./websocket/index.js";
 /* =========================
    FIREWALL
 ========================= */
@@ -101,7 +112,7 @@ app.use(
         return callback(null, true);
       }
 
-      auditLog(`Blocked Origin: ${origin}`);
+      discordLog(`Blocked Origin: ${origin}`);
       return callback(null, true); // IMPORTANT: avoid breaking frontend
     },
     credentials: true,
@@ -172,7 +183,7 @@ app.use((req, res, next) => {
     const payload = JSON.stringify(req.body || {});
 
     if (detectThreat(payload)) {
-      auditLog(`Threat blocked: ${req.originalUrl}`);
+      discordLog(`Threat blocked: ${req.originalUrl}`);
 
       return res.status(403).json({
         success: false,
@@ -196,13 +207,20 @@ firewall(app);
 ====================================================== */
 app.use("/api/auth", signupRoute);
 app.use("/api/auth", loginRoute);
+app.use("/api/auth", changePassword);
+app.use("/api/auth", deleteAccount);
+app.use("/api/auth", forgotPassword);
+app.use("/api/auth", resetPassword);
+app.use("/api/auth", resendVerification);
+app.use("/api/auth", verifyEmail);
+app.use("/api/auth", me);
+app.use("/api/auth", refresh);
 
 app.use("/api/stripe", stripeRoute);
 app.use("/api/stripe", checkoutRoute);
 app.use("/api/billing", billingRoute);
 
 app.use("/api/chat", chatRoutes);
-app.use("/api", routes);
 
 /* ======================================================
    HEALTH CHECKS

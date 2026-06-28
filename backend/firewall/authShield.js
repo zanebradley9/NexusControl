@@ -15,6 +15,11 @@ export default function authShield(req, res, next) {
     "/api/auth/login",
     "/api/auth/signup",
     "/api/auth/logout",
+    "/api/auth/forgotpassword",
+    "/api/auth/resetpassword",
+    "/api/auth/resendverification",
+    "/api/auth/verifyemail",
+    "/api/auth/refresh",
   ];
 
   const url = req.originalUrl;

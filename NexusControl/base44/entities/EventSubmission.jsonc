@@ -48,7 +48,6 @@
     "submitter_email",
     "card_message"
   ],
-  "rls": {
     "create": {
       "user_condition": {
         "role": {
@@ -93,4 +92,3 @@
       ]
     }
   }
-}
