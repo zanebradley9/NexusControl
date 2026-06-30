@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar';
+import Sidebar from '../sidebar/Sidebar';
 import NotificationToast from '@/components/notifications/NotificationToast';
 
 export default function AppLayout() {

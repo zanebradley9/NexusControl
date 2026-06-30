@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { InvokeLLM, GenerateImage } from "@/integrations/Core";
+import { InvokeLLM, GenerateImage } from "@/api/integrations";
 // Film Studio integration uses base44.entities.FilmProject via base44 import above
 import { base44 } from "@/api/base44Client";
 import { Learning } from "@/entities/Learning";
@@ -9,9 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Settings, Mic, Send, Bot, User, Loader2, History, Image as ImageIcon, Film, MessageCircle, Video, Clapperboard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import SettingsPanel from "../components/seth/SettingsPanel";
-import HistoryPanel from "../components/seth/HistoryPanel";
-import ThoughtBubble from "../components/seth/ThoughtBubble";
+import SettingsPanel from "@/components/seth/SettingsPanel";
+import HistoryPanel from "@/components/seth/HistoryPanel";
+import ThoughtBubble from "@/components/seth/ThoughtBubble";
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = SpeechRecognition ? new SpeechRecognition() : null;
