@@ -1,5 +1,10 @@
 import Stripe from "stripe";
+import { ENV } from "./env.js";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-04-30.basil",
+if (!ENV.STRIPE_SECRET_KEY) {
+    throw new Error("Missing STRIPE_SECRET_KEY");
+}
+
+export const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
+    apiVersion: "2025-04-30.basil",
 });
