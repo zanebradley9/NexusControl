@@ -1,11 +1,77 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
-  {
-    /* =====================================
-       ACCOUNT
-    ===================================== */
+const { Schema } = mongoose;
 
+/* =========================
+   SUB SCHEMAS
+========================= */
+
+const apiKeySchema = new Schema(
+  {
+    name: { type: String, trim: true, required: true },
+    key: { type: String, required: true, select: false },
+    createdAt: { type: Date, default: Date.now },
+    lastUsedAt: { type: Date, default: null },
+  },
+  { _id: false }
+);
+
+const aiUsageSchema = new Schema(
+  {
+    requests: { type: Number, default: 0 },
+    tokens: { type: Number, default: 0 },
+    modelsUsed: [{ type: String }],
+    lastRequest: { type: Date, default: null },
+  },
+  { _id: false }
+);
+
+const subscriptionSchema = new Schema(
+  {
+    plan: {
+      type: String,
+      enum: ["free", "starter", "pro", "enterprise"],
+      default: "free",
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "cancelled", "expired"],
+      default: "inactive",
+    },
+    expiresAt: { type: Date, default: null, index: true },
+    renewAt: { type: Date, default: null },
+  },
+  { _id: false }
+);
+
+const settingsSchema = new Schema(
+  {
+    theme: { type: String, enum: ["dark", "light", "system"], default: "dark" },
+    notifications: { type: Boolean, default: true },
+    sounds: { type: Boolean, default: true },
+    language: { type: String, default: "en" },
+  },
+  { _id: false }
+);
+
+const loginHistorySchema = new Schema(
+  {
+    ip: String,
+    userAgent: String,
+    success: Boolean,
+    createdAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
+/* =========================
+   MAIN USER SCHEMA
+========================= */
+
+const userSchema = new Schema(
+  {
+    /* AUTH */
     email: {
       type: String,
       required: true,
@@ -13,10 +79,6 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       index: true,
-      match: [
-        /^\S+@\S+\.\S+$/,
-        "Invalid email format",
-      ],
     },
 
     username: {
@@ -35,276 +97,85 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
-    avatar: {
-      type: String,
-      default: "",
-    },
+    /* PROFILE */
+    avatar: String,
+    banner: String,
+    bio: { type: String, maxlength: 500, default: "" },
 
-    banner: {
-      type: String,
-      default: "",
-    },
-
-    bio: {
-      type: String,
-      maxlength: 500,
-      default: "",
-    },
-
-    /* =====================================
-       PERMISSIONS
-    ===================================== */
-
+    /* ROLES */
     role: {
       type: String,
-      enum: [
-        "user",
-        "moderator",
-        "admin",
-        "owner",
-      ],
+      enum: ["user", "moderator", "admin", "owner"],
       default: "user",
-    },
-
-    permissions: {
-      type: [String],
-      default: [],
-    },
-
-    /* =====================================
-       ACCOUNT STATUS
-    ===================================== */
-
-    active: {
-      type: Boolean,
-      default: true,
-    },
-
-    verified: {
-      type: Boolean,
-      default: false,
-    },
-
-    banned: {
-      type: Boolean,
-      default: false,
-    },
-
-    banReason: {
-      type: String,
-      default: "",
-    },
-
-    banExpires: {
-      type: Date,
-      default: null,
-    },
-
-    /* =====================================
-       SECURITY
-    ===================================== */
-
-    loginCount: {
-      type: Number,
-      default: 0,
-    },
-
-    lastLogin: {
-      type: Date,
-      default: null,
-    },
-
-    lastIp: {
-      type: String,
-      default: "",
-    },
-
-    failedLogins: {
-      type: Number,
-      default: 0,
-    },
-
-    lockedUntil: {
-      type: Date,
-      default: null,
-    },
-
-    refreshToken: {
-      type: String,
-      default: null,
-      select: false,
-    },
-
-    passwordChangedAt: {
-      type: Date,
-      default: null,
-    },
-
-    resetPasswordToken: {
-      type: String,
-      default: null,
-      select: false,
-    },
-
-    resetPasswordExpires: {
-      type: Date,
-      default: null,
-    },
-
-    emailVerificationToken: {
-      type: String,
-      default: null,
-      select: false,
-    },
-
-    emailVerificationExpires: {
-      type: Date,
-      default: null,
-    },
-
-    twoFactorEnabled: {
-      type: Boolean,
-      default: false,
-    },
-
-    twoFactorSecret: {
-      type: String,
-      default: null,
-      select: false,
-    },
-
-    /* =====================================
-       DISCORD
-    ===================================== */
-
-    discordId: {
-      type: String,
-      default: null,
       index: true,
     },
 
-    discordUsername: {
-      type: String,
-      default: "",
-    },
+    permissions: [{ type: String }],
 
-    /* =====================================
-       AI SYSTEM
-    ===================================== */
+    /* STATUS */
+    active: { type: Boolean, default: true },
+    verified: { type: Boolean, default: false },
 
-    aiUsage: {
-      requests: {
-        type: Number,
-        default: 0,
-      },
+    banned: { type: Boolean, default: false },
+    banReason: { type: String, default: "" },
+    banExpires: { type: Date, default: null },
 
-      tokens: {
-        type: Number,
-        default: 0,
-      },
+    /* SECURITY */
+    loginCount: { type: Number, default: 0 },
+    lastLogin: Date,
+    lastIp: String,
 
-      modelsUsed: {
-        type: [String],
-        default: [],
-      },
+    failedLogins: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
 
-      lastRequest: {
-        type: Date,
-        default: null,
-      },
-    },
+    passwordChangedAt: Date,
 
-    /* =====================================
-       SUBSCRIPTION
-    ===================================== */
+    refreshToken: { type: String, select: false },
 
-    stripeCustomerId: {
-      type: String,
-      default: null,
-    },
+    /* PASSWORD RESET */
+    resetPasswordToken: { type: String, select: false },
+    resetPasswordExpires: Date,
 
-    subscription: {
-      plan: {
-        type: String,
-        enum: [
-          "free",
-          "starter",
-          "pro",
-          "enterprise",
-        ],
-        default: "free",
-      },
+    /* EMAIL VERIFICATION */
+    emailVerificationToken: { type: String, select: false },
+    emailVerificationExpires: Date,
 
-      status: {
-        type: String,
-        enum: [
-          "active",
-          "inactive",
-          "cancelled",
-          "expired",
-        ],
-        default: "inactive",
-      },
+    /* 2FA */
+    twoFactorEnabled: { type: Boolean, default: false },
+    twoFactorSecret: { type: String, select: false },
 
-      expiresAt: {
-        type: Date,
-        default: null,
-      },
-    },
+    /* DISCORD */
+    discordId: { type: String, index: true },
+    discordUsername: String,
 
-    /* =====================================
-       SAVE PROFILE LINK
-    ===================================== */
+    /* AI USAGE */
+    aiUsage: aiUsageSchema,
 
+    /* BILLING */
+    stripeCustomerId: { type: String, index: true },
+    subscription: subscriptionSchema,
+
+    /* RELATIONS */
     saveProfile: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Save",
-      default: null,
     },
 
-    /* =====================================
-       SETTINGS
-    ===================================== */
+    /* SETTINGS */
+    settings: settingsSchema,
 
-    settings: {
-      theme: {
-        type: String,
-        enum: [
-          "dark",
-          "light",
-          "system",
-        ],
-        default: "dark",
-      },
+    /* API KEYS */
+    apiKeys: [apiKeySchema],
 
-      notifications: {
-        type: Boolean,
-        default: true,
-      },
+    /* LOGIN HISTORY (NEW) */
+    loginHistory: [loginHistorySchema],
 
-      sounds: {
-        type: Boolean,
-        default: true,
-      },
-
-      language: {
-        type: String,
-        default: "en",
-      },
-    },
-
-    /* =====================================
-       API ACCESS
-    ===================================== */
-
-    apiKeys: [
+    /* DEVICE TRACKING (NEW) */
+    devices: [
       {
-        name: String,
-        key: String,
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
+        deviceId: String,
+        userAgent: String,
+        lastActive: Date,
       },
     ],
   },
@@ -314,33 +185,56 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-/* =====================================
-   INDEXES
-===================================== */
+/* =========================
+   INDEXES (OPTIMIZED)
+========================= */
 
 userSchema.index({ email: 1 });
 userSchema.index({ username: 1 });
-userSchema.index({ role: 1 });
+userSchema.index({ role: 1, banned: 1 });
 userSchema.index({ discordId: 1 });
 userSchema.index({ stripeCustomerId: 1 });
 
-/* =====================================
+/* =========================
    VIRTUALS
-===================================== */
+========================= */
 
 userSchema.virtual("isPremium").get(function () {
-  return (
-    this.subscription &&
-    this.subscription.plan !== "free"
-  );
+  return this.subscription?.plan && this.subscription.plan !== "free";
 });
 
-/* =====================================
-   MODEL
-===================================== */
+userSchema.virtual("isLocked").get(function () {
+  return this.lockUntil && this.lockUntil > Date.now();
+});
+
+/* =========================
+   MIDDLEWARE HELPERS
+========================= */
+
+userSchema.methods.incrementLogin = function (ip) {
+  this.loginCount += 1;
+  this.lastLogin = new Date();
+  this.lastIp = ip;
+};
+
+userSchema.methods.failLogin = function () {
+  this.failedLogins += 1;
+
+  if (this.failedLogins >= 5) {
+    this.lockUntil = Date.now() + 15 * 60 * 1000; // 15 min lock
+  }
+};
+
+userSchema.methods.resetFailures = function () {
+  this.failedLogins = 0;
+  this.lockUntil = null;
+};
+
+/* =========================
+   MODEL EXPORT
+========================= */
 
 const User =
-  mongoose.models.User ||
-  mongoose.model("User", userSchema);
+  mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;
