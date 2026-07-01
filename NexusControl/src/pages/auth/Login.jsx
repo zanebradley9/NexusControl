@@ -1,79 +1,72 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://nexuscontrol-production.up.railway.app";
 
-export default function Login() {
+export default function ResetPassword() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [email, setEmail] = useState("");
+  const token = searchParams.get("token");
+
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
     if (loading) return;
 
-    setLoading(true);
     setError("");
+    setSuccess("");
+    setLoading(true);
+
+    if (!token) {
+      setError("Invalid or missing reset token");
+      setLoading(false);
+      return;
+    }
+
+    if (password !== confirm) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const res = await fetch(`${API_URL}/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: controller.signal,
         body: JSON.stringify({
-          email: email.trim().toLowerCase(),
+          token,
           password,
         }),
       });
 
-      clearTimeout(timeout);
+      const text = await res.text();
+      const data = JSON.parse(text);
 
-      const text = await response.text();
-
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Invalid server response");
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Reset failed");
       }
 
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Login failed");
-      }
+      setSuccess("Password reset successful. Redirecting...");
 
-      if (!data.token) {
-        throw new Error("Missing authentication token");
-      }
-
-      // Store auth safely (single source of truth)
-      localStorage.setItem("accessToken", data.token);
-
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      }
-
-      // optional legacy support (remove later if not needed)
-      if (data.save) {
-        localStorage.setItem("save", JSON.stringify(data.save));
-      }
-
-      // redirect
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (err) {
-      console.error("Login error:", err);
-
       if (err.name === "AbortError") {
-        setError("Request timed out. Try again.");
+        setError("Request timed out");
       } else {
         setError(err.message || "Server error");
       }
@@ -84,71 +77,47 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-black p-6">
+      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 p-8 rounded-2xl">
 
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white">NexusControl</h1>
-          <p className="text-zinc-400 mt-2">Login to your account</p>
-          <p className="text-xs text-zinc-500 mt-2 break-all">
-            API: {API_URL}
-          </p>
-        </div>
+        <h1 className="text-white text-2xl font-bold mb-2">
+          Reset Password
+        </h1>
 
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500 text-red-400 text-sm">
-            {error}
-          </div>
-        )}
+        <p className="text-zinc-400 text-sm mb-6">
+          Enter your new password
+        </p>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+        {success && <p className="text-green-400 text-sm mb-3">{success}</p>}
+
+        <form onSubmit={handleReset} className="space-y-4">
 
           <input
-            type="email"
-            placeholder="Email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white outline-none focus:border-cyan-400"
+            type="password"
+            placeholder="New password"
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 bg-zinc-800 text-white rounded-xl border border-zinc-700"
           />
 
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              required
-              autoComplete="current-password"
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 text-white outline-none focus:border-cyan-400"
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-3 text-zinc-400 text-sm"
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
-          </div>
+          <input
+            type="password"
+            placeholder="Confirm password"
+            minLength={6}
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            className="w-full p-3 bg-zinc-800 text-white rounded-xl border border-zinc-700"
+          />
 
           <button
-            type="submit"
-            disabled={loading || !email || !password}
-            className="w-full bg-cyan-400 hover:bg-cyan-300 transition text-black font-bold py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
+            className="w-full bg-cyan-400 text-black font-bold py-3 rounded-xl"
           >
-            {loading ? "Signing In..." : "Login"}
+            {loading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
-
-        <p className="text-zinc-400 text-sm text-center mt-6">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-cyan-400 hover:underline">
-            Sign Up
-          </Link>
-        </p>
       </div>
     </div>
   );

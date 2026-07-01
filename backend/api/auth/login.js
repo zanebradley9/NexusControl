@@ -4,8 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../../models/user.js";
 import Save from "../../models/save.js";
 import LogoutLog from "../../models/logoutLog.js";
-const { LoginHistory } = require("../../utils/history");
-
+import { LoginHistory } from "../../utils/history.js";
 import { comparePassword } from "./hash.js";
 
 const router = express.Router();

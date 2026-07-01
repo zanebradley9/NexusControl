@@ -1,27 +1,18 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-/**
- * Base schema used for all history types
- * Includes TTL + timestamps
- */
+/* =========================
+   BASE SCHEMA (CLEAN)
+========================= */
+
 const baseHistorySchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      index: true,
     },
 
-    email: {
-      type: String,
-      required: false,
-      index: true,
-    },
-
-    reason: {
-      type: String,
-      default: null,
-    },
+    email: String,
+    reason: String,
 
     metadata: {
       type: Object,
@@ -31,29 +22,34 @@ const baseHistorySchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
     },
 
-    // TTL field (MongoDB auto deletes docs when this date is reached)
     expiresAt: {
       type: Date,
       required: true,
-      index: true,
     },
   },
   { strict: true }
 );
 
-/**
- * TTL INDEX (MongoDB will auto delete expired documents)
- * Runs background cleanup automatically
- */
-baseHistorySchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+/* =========================
+   INDEXES (ONLY HERE)
+========================= */
 
-/* -----------------------------
-   Helper: create model factory
------------------------------- */
-function createHistoryModel(name, ttlSeconds) {
+// fast lookup
+baseHistorySchema.index({ userId: 1 });
+
+// TTL auto delete
+baseHistorySchema.index(
+  { expiresAt: 1 },
+  { expireAfterSeconds: 0 }
+);
+
+/* =========================
+   MODEL FACTORY
+========================= */
+
+function createModel(name, ttlSeconds) {
   const schema = baseHistorySchema.clone();
 
   schema.pre("save", function (next) {
@@ -66,61 +62,41 @@ function createHistoryModel(name, ttlSeconds) {
   return mongoose.model(name, schema);
 }
 
-/* -----------------------------
-   HISTORY MODELS
------------------------------- */
+/* =========================
+   MODELS
+========================= */
 
-// 🚫 Blocklist (permanent-ish, but still TTL based)
-const BlocklistHistory = createHistoryModel(
+export const BlocklistHistory = createModel(
   "BlocklistHistory",
-  60 * 60 * 24 * 365 // 1 year
+  60 * 60 * 24 * 365
 );
 
-// ⛔ Suspension history
-const SuspensionHistory = createHistoryModel(
+export const SuspensionHistory = createModel(
   "SuspensionHistory",
-  60 * 60 * 24 * 90 // 90 days
+  60 * 60 * 24 * 90
 );
 
-// 🧹 11-day delete history
-const DeleteHistory11d = createHistoryModel(
+export const DeleteHistory11d = createModel(
   "DeleteHistory11d",
   60 * 60 * 24 * 11
 );
 
-// 🧹 12-day delete history
-const DeleteHistory12d = createHistoryModel(
+export const DeleteHistory12d = createModel(
   "DeleteHistory12d",
   60 * 60 * 24 * 12
 );
 
-// 💣 10-day full delete history
-const FullDeleteHistory10d = createHistoryModel(
+export const FullDeleteHistory10d = createModel(
   "FullDeleteHistory10d",
   60 * 60 * 24 * 10
 );
 
-// 💳 Subscription history
-const SubscriptionHistory = createHistoryModel(
+export const SubscriptionHistory = createModel(
   "SubscriptionHistory",
-  60 * 60 * 24 * 365 // 1 year
+  60 * 60 * 24 * 365
 );
 
-// 🔐 Login history (keep short for security)
-const LoginHistory = createHistoryModel(
+export const LoginHistory = createModel(
   "LoginHistory",
-  60 * 60 * 24 * 30 // 30 days
+  60 * 60 * 24 * 30
 );
-
-/* -----------------------------
-   EXPORTS
------------------------------- */
-module.exports = {
-  BlocklistHistory,
-  SuspensionHistory,
-  DeleteHistory11d,
-  DeleteHistory12d,
-  FullDeleteHistory10d,
-  SubscriptionHistory,
-  LoginHistory,
-};
